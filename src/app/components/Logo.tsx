@@ -4,8 +4,8 @@ import { styled } from "styled-components";
 import Image from 'next/image';
 import { COLORS } from "@/app/constants/colors";
 
-export const StyledHeadingDiv = styled.div<{ isDark?: boolean; fontSize?: string }>`
-  color: ${(props) => (props.isDark ? COLORS.text.light : COLORS.text.primary)};
+export const StyledHeadingDiv = styled.div<{ $isDark?: boolean; fontSize?: string }>`
+  color: ${(props) => (props.$isDark ? COLORS.text.light : COLORS.text.primary)};
   font-size: ${(props) => props.fontSize};
   font-weight: bold;
   height: fit-content;
@@ -16,13 +16,13 @@ export const StyledHeadingDiv = styled.div<{ isDark?: boolean; fontSize?: string
   width: 150px;
 `;
 
-const StyledSpan = styled.span<{ isDark?: boolean }>`
+const StyledSpan = styled.span<{ $isDark?: boolean }>`
   color: ${COLORS.accent};
   font-family: cursive;
 `;
 
-const StyledSpan2 = styled.span<{ isDark?: boolean }>`
-  color: ${(props) => (props.isDark ? COLORS.text.light : COLORS.text.primary)};
+const StyledSpan2 = styled.span<{ $isDark?: boolean }>`
+  color: ${(props) => (props.$isDark ? COLORS.text.light : COLORS.text.primary)};
   font-family: cursive;
 `;
 
@@ -36,7 +36,7 @@ const LogoComponent = ({ fontSize, onClickHandler, isDark }: LogoInterface) => {
   
   return (
     <StyledHeadingDiv
-      isDark={isDark}
+      $isDark={isDark}
       fontSize={fontSize}
       onClick={onClickHandler}
     >
@@ -48,8 +48,8 @@ const LogoComponent = ({ fontSize, onClickHandler, isDark }: LogoInterface) => {
           className="object-contain"
         />
       </div>
-      <StyledSpan isDark={isDark}>VR</StyledSpan>
-      <StyledSpan2 isDark={isDark}>Nursery</StyledSpan2>
+      <StyledSpan $isDark={isDark}>VR</StyledSpan>
+      <StyledSpan2 $isDark={isDark}>Nursery</StyledSpan2>
     </StyledHeadingDiv>
   );
 };

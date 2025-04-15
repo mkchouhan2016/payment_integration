@@ -32,7 +32,7 @@ export default function PlantList({ searchQuery = '' }: PlantListProps) {
       const response = searchQuery
         ? await plantService.searchPlants(searchQuery, page)
         : await plantService.getPlants(page);
-      
+      console.log("response", response);
       setPlants(response.data);
       setTotalItems(response.meta.total);
       setTotalPages(Math.ceil(response.meta.total / 12));
@@ -47,7 +47,7 @@ export default function PlantList({ searchQuery = '' }: PlantListProps) {
 
   useEffect(() => {
     fetchPlants(currentPage);
-  }, [currentPage, searchQuery,fetchPlants]);
+  }, [currentPage, searchQuery]);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -80,13 +80,12 @@ export default function PlantList({ searchQuery = '' }: PlantListProps) {
         <button
           key={i}
           onClick={() => handlePageChange(i)}
-          className={`px-3 py-1 md:px-4 md:py-2 border rounded-md text-sm md:text-base ${
-            currentPage === i
+          className={`px-3 py-1 md:px-4 md:py-2 border rounded-md text-sm md:text-base ${currentPage === i
               ? `bg-${COLORS.accent} text-white`
               : isDark
-              ? 'bg-gray-700 text-gray-300 hover:bg-gray-600'
-              : 'bg-white text-gray-700 hover:bg-gray-100'
-          }`}
+                ? 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                : 'bg-white text-gray-700 hover:bg-gray-100'
+            }`}
         >
           {i}
         </button>
@@ -118,11 +117,10 @@ export default function PlantList({ searchQuery = '' }: PlantListProps) {
         {plants.map((plant) => {
           const cartItem = cartItems.find((item) => item.plant.id === plant.id);
           return (
-            <div 
-              key={plant.id} 
-              className={`rounded-lg shadow-md overflow-hidden ${
-                isDark ? 'bg-gray-800' : 'bg-white'
-              }`}
+            <div
+              key={plant.id}
+              className={`rounded-lg shadow-md overflow-hidden ${isDark ? 'bg-gray-800' : 'bg-white'
+                }`}
             >
               <div className="relative h-48 w-full">
                 <Image
@@ -134,39 +132,34 @@ export default function PlantList({ searchQuery = '' }: PlantListProps) {
                 />
               </div>
               <div className="p-4">
-                <h3 className={`text-lg font-semibold ${
-                  isDark ? 'text-white' : 'text-gray-800'
-                }`}>
+                <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-800'
+                  }`}>
                   {plant.common_name || 'Unknown Plant'}
                 </h3>
-                <p className={`text-sm italic ${
-                  isDark ? 'text-gray-300' : 'text-gray-600'
-                }`}>
+                <p className={`text-sm italic ${isDark ? 'text-gray-300' : 'text-gray-600'
+                  }`}>
                   {plant.scientific_name}
                 </p>
-                <p className={`text-sm mt-2 ${
-                  isDark ? 'text-gray-400' : 'text-gray-500'
-                }`}>
+                <p className={`text-sm mt-2 ${isDark ? 'text-gray-400' : 'text-gray-500'
+                  }`}>
                   Family: {plant.family_common_name || plant.family}
                 </p>
                 <div className="mt-4 space-y-2">
                   <button
                     onClick={() => handleViewPlant(plant)}
-                    className={`w-full py-2 px-4 rounded-md font-medium transition-colors ${
-                      isDark
+                    className={`w-full py-2 px-4 rounded-md font-medium transition-colors ${isDark
                         ? 'bg-gray-700 hover:bg-gray-600 text-white'
                         : 'bg-gray-200 hover:bg-gray-300 text-gray-800'
-                    }`}
+                      }`}
                   >
                     View Details
                   </button>
                   <button
                     onClick={() => handleAddToCart(plant)}
-                    className={`w-full py-2 px-4 rounded-md font-medium transition-colors ${
-                      isDark
+                    className={`w-full py-2 px-4 rounded-md font-medium transition-colors ${isDark
                         ? 'bg-green-600 hover:bg-green-700 text-white'
                         : 'bg-green-500 hover:bg-green-600 text-white'
-                    }`}
+                      }`}
                   >
                     {cartItem ? `Add to Cart (${cartItem.quantity})` : 'Add to Cart'}
                   </button>
@@ -183,33 +176,30 @@ export default function PlantList({ searchQuery = '' }: PlantListProps) {
           <button
             onClick={() => handlePageChange(currentPage - 1)}
             disabled={currentPage === 1}
-            className={`px-3 py-1 md:px-4 md:py-2 border rounded-md text-sm md:text-base disabled:opacity-50 ${
-              isDark
+            className={`px-3 py-1 md:px-4 md:py-2 border rounded-md text-sm md:text-base disabled:opacity-50 ${isDark
                 ? 'bg-gray-700 text-gray-300 hover:bg-gray-600'
                 : 'bg-white text-gray-700 hover:bg-gray-100'
-            }`}
+              }`}
           >
             Previous
           </button>
-          
+
           {renderPaginationNumbers()}
 
           <button
             onClick={() => handlePageChange(currentPage + 1)}
             disabled={currentPage === totalPages}
-            className={`px-3 py-1 md:px-4 md:py-2 border rounded-md text-sm md:text-base disabled:opacity-50 ${
-              isDark
+            className={`px-3 py-1 md:px-4 md:py-2 border rounded-md text-sm md:text-base disabled:opacity-50 ${isDark
                 ? 'bg-gray-700 text-gray-300 hover:bg-gray-600'
                 : 'bg-white text-gray-700 hover:bg-gray-100'
-            }`}
+              }`}
           >
             Next
           </button>
         </div>
 
-        <div className={`text-sm md:text-base ${
-          isDark ? 'text-gray-400' : 'text-gray-600'
-        }`}>
+        <div className={`text-sm md:text-base ${isDark ? 'text-gray-400' : 'text-gray-600'
+          }`}>
           Showing {plants.length} of {totalItems} plants
         </div>
       </div>
