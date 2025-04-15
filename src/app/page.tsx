@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import Header from './components/Header';
 import Carousel from './components/Carousel';
 import PlantList from './components/PlantList';
 import Footer from './components/Footer';
@@ -26,12 +25,12 @@ const carouselImages = [
 ];
 
 export default function Home() {
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery] = useState('');
 
   console.log("searchQuery", searchQuery);
   return (
     <div className="min-h-screen flex flex-col">
-      
+
       <main className="flex-grow">
         <div className="container mx-auto px-4 py-8">
           {/* Carousel Section */}

@@ -2,7 +2,6 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { ThemeProvider as StyledThemeProvider } from 'styled-components';
-import { COLORS } from '../constants/colors';
 
 interface ThemeContextType {
   isDark: boolean;

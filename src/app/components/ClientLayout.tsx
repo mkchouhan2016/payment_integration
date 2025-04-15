@@ -16,7 +16,7 @@ export default function ClientLayout({
   const handleSearch = (query: string) => {
     setSearchQuery(query);
   };
-
+  console.log(searchQuery);
   return (
     <Provider store={store}>
       <ThemeProvider>

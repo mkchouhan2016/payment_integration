@@ -19,6 +19,7 @@ export interface Plant {
     native: string[];
     introduced: string[];
   };
+  price: number;
 }
 
 export interface PlantResponse {

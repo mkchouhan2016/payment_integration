@@ -6,8 +6,6 @@ import { useTheme } from '../context/ThemeContext';
 import { useAppSelector } from '../store/hooks';
 import { RootState } from '../store/store';
 import LogoComponent from './Logo';
-import { COLORS } from '../constants/colors';
-
 interface HeaderProps {
   onSearch: (query: string) => void;
 }

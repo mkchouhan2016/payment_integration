@@ -1,7 +1,6 @@
 'use client';
 
 import { styled } from "styled-components";
-import { useTheme } from "../context/ThemeContext";
 import Image from 'next/image';
 import { COLORS } from "@/app/constants/colors";
 
@@ -34,7 +33,6 @@ interface LogoInterface {
 }
 
 const LogoComponent = ({ fontSize, onClickHandler, isDark }: LogoInterface) => {
-  const { theme } = useTheme();
   
   return (
     <StyledHeadingDiv

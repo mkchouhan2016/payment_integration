@@ -4,6 +4,7 @@ import { useTheme } from '../context/ThemeContext';
 import { Plant } from '../services/plantService';
 import { useAppDispatch } from '../store/hooks';
 import { addToCart } from '../store/cartSlice';
+import Image from 'next/image';
 
 interface PlantModalProps {
   plant: Plant;
@@ -40,10 +41,12 @@ export default function PlantModal({ plant, isOpen, onClose }: PlantModalProps) 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* Image section */}
             <div className="relative h-64 md:h-96">
-              <img
+              <Image
                 src={plant.image_url || '/placeholder-plant.jpg'}
                 alt={plant.common_name || 'Plant image'}
                 className="w-full h-full object-cover rounded-lg"
+                width={1000}  
+                height={1000}
               />
             </div>
 

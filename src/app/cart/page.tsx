@@ -6,6 +6,13 @@ import { useTheme } from '../context/ThemeContext';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { removeFromCart, updateQuantity, clearCart } from '../store/cartSlice';
 import { RootState } from '../store/store';
+import { Plant } from '../services/plantService';
+import Link from 'next/link';
+
+interface CartItem {
+  plant: Plant;
+  quantity: number;
+}
 
 export default function CartPage() {
   const { isDark } = useTheme();
@@ -32,43 +39,50 @@ export default function CartPage() {
     }, 2000);
   };
 
-  const subtotal = cartItems.reduce((total: number, item: any) => total + (item.plant.price || 0) * item.quantity, 0);
+  const subtotal = cartItems.reduce((total: number, item: CartItem) => {
+    const price = item.plant.price || 29.99; // Default price of $29.99 if not available
+    return total + price * item.quantity;
+  }, 0);
   const shipping = subtotal > 0 ? 10 : 0;
   const total = subtotal + shipping;
 
   if (cartItems.length === 0) {
     return (
-      <div className={`min-h-[60vh] flex flex-col items-center justify-center ${isDark ? 'text-gray-300' : 'text-gray-600'
-        }`}>
+      <div className={`min-h-[60vh] flex flex-col items-center justify-center ${
+        isDark ? 'text-gray-300' : 'text-gray-600'
+      }`}>
         <h2 className="text-2xl font-semibold mb-4">Your cart is empty</h2>
         <p className="mb-8">Add some beautiful plants to your cart!</p>
-        <a
+        <Link
           href="/"
-          className={`px-6 py-3 rounded-lg font-medium ${isDark
-            ? 'bg-green-600 hover:bg-green-700 text-white'
-            : 'bg-green-500 hover:bg-green-600 text-white'
-            }`}
+          className={`px-6 py-3 rounded-lg font-medium ${
+            isDark
+              ? 'bg-green-600 hover:bg-green-700 text-white'
+              : 'bg-green-500 hover:bg-green-600 text-white'
+          }`}
         >
           Continue Shopping
-        </a>
+        </Link>
       </div>
     );
   }
-  console.log("isDark", isDark)
+
   return (
     <div className="space-y-8">
-      <h1 className={`text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-800'
-        }`}>
+      <h1 className={`text-3xl font-bold ${
+        isDark ? 'text-white' : 'text-gray-800'
+      }`}>
         Shopping Cart
       </h1>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 space-y-4">
-          {cartItems.map((item: any) => (
+          {cartItems.map((item: CartItem) => (
             <div
               key={item.plant.id}
-              className={`flex items-center space-x-4 p-4 rounded-lg ${isDark ? 'bg-gray-800' : 'bg-white'
-                } shadow-md`}
+              className={`flex items-center space-x-4 p-4 rounded-lg ${
+                isDark ? 'bg-gray-800' : 'bg-white'
+              } shadow-md`}
             >
               <div className="relative w-24 h-24 flex-shrink-0">
                 <Image
@@ -80,43 +94,50 @@ export default function CartPage() {
                 />
               </div>
               <div className="flex-1">
-                <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-800'
-                  }`}>
+                <h3 className={`text-lg font-semibold ${
+                  isDark ? 'text-white' : 'text-gray-800'
+                }`}>
                   {item.plant.common_name || 'Unknown Plant'}
                 </h3>
-                <p className={`text-sm italic ${isDark ? 'text-gray-400' : 'text-gray-600'
-                  }`}>
+                <p className={`text-sm italic ${
+                  isDark ? 'text-gray-400' : 'text-gray-600'
+                }`}>
                   {item.plant.scientific_name}
                 </p>
-                <p className={`text-sm mt-1 ${isDark ? 'text-gray-300' : 'text-gray-700'
-                  }`}>
+                <p className={`text-sm mt-1 ${
+                  isDark ? 'text-gray-300' : 'text-gray-700'
+                }`}>
                   ${(item.plant.price || 0).toFixed(2)} each
                 </p>
               </div>
               <div className="flex items-center space-x-2">
                 <button
                   onClick={() => handleQuantityChange(item.plant.id, item.quantity - 1)}
-                  className={`p-1 rounded ${isDark ? 'text-white' : 'text-gray-800'
-                    }`}
+                  className={`p-1 rounded ${
+                    isDark ? 'hover:bg-gray-700' : 'hover:bg-gray-100'
+                  }`}
                 >
                   -
                 </button>
-                <span className={`w-8 text-center ${isDark ? 'text-white' : 'text-gray-800'
-                  }`}>
+                <span className={`w-8 text-center ${
+                  isDark ? 'text-white' : 'text-gray-800'
+                }`}>
                   {item.quantity}
                 </span>
                 <button
                   onClick={() => handleQuantityChange(item.plant.id, item.quantity + 1)}
-                  className={`p-1 rounded ${isDark ? 'text-white' : 'text-gray-800'
-                    }`}
+                  className={`p-1 rounded ${
+                    isDark ? 'hover:bg-gray-700' : 'hover:bg-gray-100'
+                  }`}
                 >
                   +
                 </button>
               </div>
               <button
                 onClick={() => handleRemoveItem(item.plant.id)}
-                className={`p-2 rounded-full ${isDark ? 'hover:bg-gray-700' : 'hover:bg-gray-100'
-                  }`}
+                className={`p-2 rounded-full ${
+                  isDark ? 'hover:bg-gray-700' : 'hover:bg-gray-100'
+                }`}
               >
                 🗑️
               </button>
@@ -124,10 +145,12 @@ export default function CartPage() {
           ))}
         </div>
 
-        <div className={`lg:col-span-1 p-6 rounded-lg ${isDark ? 'bg-gray-800' : 'bg-white'
-          } shadow-md h-fit`}>
-          <h2 className={`text-xl font-semibold mb-4 ${isDark ? 'text-white' : 'text-gray-800'
-            }`}>
+        <div className={`lg:col-span-1 p-6 rounded-lg ${
+          isDark ? 'bg-gray-800' : 'bg-white'
+        } shadow-md h-fit`}>
+          <h2 className={`text-xl font-semibold mb-4 ${
+            isDark ? 'text-white' : 'text-gray-800'
+          }`}>
             Order Summary
           </h2>
           <div className="space-y-2">
@@ -141,12 +164,14 @@ export default function CartPage() {
             </div>
             <div className="border-t pt-2 mt-2">
               <div className="flex justify-between">
-                <span className={`font-semibold ${isDark ? 'text-white' : 'text-gray-800'
-                  }`}>
+                <span className={`font-semibold ${
+                  isDark ? 'text-white' : 'text-gray-800'
+                }`}>
                   Total
                 </span>
-                <span className={`font-semibold ${isDark ? 'text-white' : 'text-gray-800'
-                  }`}>
+                <span className={`font-semibold ${
+                  isDark ? 'text-white' : 'text-gray-800'
+                }`}>
                   ${total.toFixed(2)}
                 </span>
               </div>
@@ -155,10 +180,11 @@ export default function CartPage() {
           <button
             onClick={handleCheckout}
             disabled={isCheckingOut}
-            className={`w-full mt-6 py-3 rounded-lg font-medium ${isDark
-              ? 'bg-green-600 hover:bg-green-700 text-white'
-              : 'bg-green-500 hover:bg-green-600 text-white'
-              } disabled:opacity-50 disabled:cursor-not-allowed`}
+            className={`w-full mt-6 py-3 rounded-lg font-medium ${
+              isDark
+                ? 'bg-green-600 hover:bg-green-700 text-white'
+                : 'bg-green-500 hover:bg-green-600 text-white'
+            } disabled:opacity-50 disabled:cursor-not-allowed`}
           >
             {isCheckingOut ? 'Processing...' : 'Checkout'}
           </button>
