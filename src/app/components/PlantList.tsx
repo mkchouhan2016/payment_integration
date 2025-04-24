@@ -48,7 +48,7 @@ export default function PlantList({ searchQuery = '' }: PlantListProps) {
 
   useEffect(() => {
     fetchPlants(currentPage);
-  }, [currentPage, searchQuery]);
+  }, [currentPage]);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);

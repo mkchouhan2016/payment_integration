@@ -26,22 +26,23 @@ export default function Header({ onSearch }: HeaderProps) {
   const handleCartClick = () => {
     router.push('/cart');
   };
-  const debouncing = (fn: (...args: any[]) => void, delay: number) => {
-    let timer: ReturnType<typeof setTimeout>;
-    return function (...args: any[]) {
-      if (timer) clearTimeout(timer); // Cancel the previous timer if it exists
-      timer = setTimeout(() => {
-        fn(...args);
-      }, delay);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const debouncing = <T extends (...args: any[]) => void>(fn: T, delay: number): ((...args: Parameters<T>) => void) => {
+    let timer: NodeJS.Timeout;
+    return (...args: Parameters<T>) => {
+      clearTimeout(timer);
+      timer = setTimeout(() => fn(...args), delay);
     };
   };
-  const searching=(value="")=>{
+
+  const searching = (value = "") => {
     console.log("searching...", value);
     setSearch(value)
-  } 
+  }
+  // react-hooks/exhaustive-deps
   const debouncedSearch = useCallback(
-    debouncing(searching, 500),
-    []
+    debouncing((value) => searching(value), 500),
+    [searching]
   );
   console.log("searchQuerysearchQuery", searchQuery);
   return (

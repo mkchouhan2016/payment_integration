@@ -49,8 +49,9 @@ export const plantService = {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      const data: any = await response.json();
+      const data: PlantResponse = await response.json();
       console.log("datadatadatadata", data?.data);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return data?.data as any;
     } catch (error) {
       console.error("Error fetching plants:", error);
@@ -69,7 +70,7 @@ export const plantService = {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const data: any = await response.json();
       return data.data;
     } catch (error) {
