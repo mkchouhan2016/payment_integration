@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Carousel from './components/Carousel';
 import PlantList from './components/PlantList';
 import Footer from './components/Footer';
+import { useSearch } from '@/app/context/SearchContext';
 
 const carouselImages = [
   {
@@ -25,7 +26,8 @@ const carouselImages = [
 ];
 
 export default function Home() {
-  const [searchQuery] = useState('');
+  const {search} = useSearch();
+  const [searchQuery] = useState(null);
 
   console.log("searchQuery", searchQuery);
   return (
@@ -43,7 +45,7 @@ export default function Home() {
             <h2 className="text-3xl font-bold text-gray-800 mb-8">
               {searchQuery ? `Search Results for "${searchQuery}"` : 'Our Plant Collection'}
             </h2>
-            <PlantList searchQuery={searchQuery} />
+            <PlantList searchQuery={search} />
           </section>
         </div>
       </main>

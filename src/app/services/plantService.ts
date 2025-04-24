@@ -36,20 +36,24 @@ export interface PlantResponse {
 }
 
 export const plantService = {
-  async getPlants(page: number = 1, perPage: number = 12): Promise<PlantResponse> {
+  async getPlants(
+    page: number = 1,
+    perPage: number = 12
+  ): Promise<PlantResponse> {
     try {
       const response = await fetch(
-        `/api/plants?page=${page}&per_page=${perPage}`
+        `https://plants-api-ht8p.onrender.com/plants?page=${page}&per_page=${perPage}`
       );
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      const data: PlantResponse = await response.json();
-      return data;
+      const data: any = await response.json();
+      console.log("datadatadatadata", data?.data);
+      return data?.data as any;
     } catch (error) {
-      console.error('Error fetching plants:', error);
+      console.error("Error fetching plants:", error);
       throw error;
     }
   },
@@ -57,18 +61,20 @@ export const plantService = {
   async searchPlants(query: string, page: number = 1): Promise<PlantResponse> {
     try {
       const response = await fetch(
-        `/api/plants?q=${encodeURIComponent(query)}&page=${page}`
+        // `/api/plants?q=${encodeURIComponent(query)}&page=${page}`
+
+        `https://plants-api-ht8p.onrender.com/plants?common_name=${encodeURIComponent(query)}&page=${page}`
       );
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      const data: PlantResponse = await response.json();
-      return data;
+      const data: any = await response.json();
+      return data.data;
     } catch (error) {
-      console.error('Error searching plants:', error);
+      console.error("Error searching plants:", error);
       throw error;
     }
-  }
-}; 
+  },
+};

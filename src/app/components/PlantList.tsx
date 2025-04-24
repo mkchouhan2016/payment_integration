@@ -26,13 +26,14 @@ export default function PlantList({ searchQuery = '' }: PlantListProps) {
   const dispatch = useAppDispatch();
   const cartItems = useAppSelector((state: RootState) => state.cart.items);
 
+  
   const fetchPlants = async (page: number) => {
     try {
       setLoading(true);
       const response = searchQuery
         ? await plantService.searchPlants(searchQuery, page)
         : await plantService.getPlants(page);
-      console.log("response", response);
+      console.log("response", response, searchQuery);
       setPlants(response.data);
       setTotalItems(response.meta.total);
       setTotalPages(Math.ceil(response.meta.total / 12));
@@ -81,10 +82,10 @@ export default function PlantList({ searchQuery = '' }: PlantListProps) {
           key={i}
           onClick={() => handlePageChange(i)}
           className={`px-3 py-1 md:px-4 md:py-2 border rounded-md text-sm md:text-base ${currentPage === i
-              ? `bg-${COLORS.accent} text-white`
-              : isDark
-                ? 'bg-gray-700 text-gray-300 hover:bg-gray-600'
-                : 'bg-white text-gray-700 hover:bg-gray-100'
+            ? `bg-${COLORS.accent} text-white`
+            : isDark
+              ? 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+              : 'bg-white text-gray-700 hover:bg-gray-100'
             }`}
         >
           {i}
@@ -148,8 +149,8 @@ export default function PlantList({ searchQuery = '' }: PlantListProps) {
                   <button
                     onClick={() => handleViewPlant(plant)}
                     className={`w-full py-2 px-4 rounded-md font-medium transition-colors ${isDark
-                        ? 'bg-gray-700 hover:bg-gray-600 text-white'
-                        : 'bg-gray-200 hover:bg-gray-300 text-gray-800'
+                      ? 'bg-gray-700 hover:bg-gray-600 text-white'
+                      : 'bg-gray-200 hover:bg-gray-300 text-gray-800'
                       }`}
                   >
                     View Details
@@ -157,8 +158,8 @@ export default function PlantList({ searchQuery = '' }: PlantListProps) {
                   <button
                     onClick={() => handleAddToCart(plant)}
                     className={`w-full py-2 px-4 rounded-md font-medium transition-colors ${isDark
-                        ? 'bg-green-600 hover:bg-green-700 text-white'
-                        : 'bg-green-500 hover:bg-green-600 text-white'
+                      ? 'bg-green-600 hover:bg-green-700 text-white'
+                      : 'bg-green-500 hover:bg-green-600 text-white'
                       }`}
                   >
                     {cartItem ? `Add to Cart (${cartItem.quantity})` : 'Add to Cart'}
@@ -177,8 +178,8 @@ export default function PlantList({ searchQuery = '' }: PlantListProps) {
             onClick={() => handlePageChange(currentPage - 1)}
             disabled={currentPage === 1}
             className={`px-3 py-1 md:px-4 md:py-2 border rounded-md text-sm md:text-base disabled:opacity-50 ${isDark
-                ? 'bg-gray-700 text-gray-300 hover:bg-gray-600'
-                : 'bg-white text-gray-700 hover:bg-gray-100'
+              ? 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+              : 'bg-white text-gray-700 hover:bg-gray-100'
               }`}
           >
             Previous
@@ -190,8 +191,8 @@ export default function PlantList({ searchQuery = '' }: PlantListProps) {
             onClick={() => handlePageChange(currentPage + 1)}
             disabled={currentPage === totalPages}
             className={`px-3 py-1 md:px-4 md:py-2 border rounded-md text-sm md:text-base disabled:opacity-50 ${isDark
-                ? 'bg-gray-700 text-gray-300 hover:bg-gray-600'
-                : 'bg-white text-gray-700 hover:bg-gray-100'
+              ? 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+              : 'bg-white text-gray-700 hover:bg-gray-100'
               }`}
           >
             Next

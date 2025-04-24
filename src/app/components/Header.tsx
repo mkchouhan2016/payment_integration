@@ -1,16 +1,18 @@
 'use client';
 
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTheme } from '../context/ThemeContext';
 import { useAppSelector } from '../store/hooks';
 import { RootState } from '../store/store';
 import LogoComponent from './Logo';
+import { useSearch } from '@/app/context/SearchContext';
 interface HeaderProps {
   onSearch: (query: string) => void;
 }
 
 export default function Header({ onSearch }: HeaderProps) {
+  const { setSearch } = useSearch();
   const [searchQuery, setSearchQuery] = useState('');
   const { isDark, toggleTheme } = useTheme();
   const router = useRouter();
@@ -24,11 +26,27 @@ export default function Header({ onSearch }: HeaderProps) {
   const handleCartClick = () => {
     router.push('/cart');
   };
-
+  const debouncing = (fn: (...args: any[]) => void, delay: number) => {
+    let timer: ReturnType<typeof setTimeout>;
+    return function (...args: any[]) {
+      if (timer) clearTimeout(timer); // Cancel the previous timer if it exists
+      timer = setTimeout(() => {
+        fn(...args);
+      }, delay);
+    };
+  };
+  const searching=(value="")=>{
+    console.log("searching...", value);
+    setSearch(value)
+  } 
+  const debouncedSearch = useCallback(
+    debouncing(searching, 500),
+    []
+  );
+  console.log("searchQuerysearchQuery", searchQuery);
   return (
-    <header className={`sticky top-0 z-50 ${
-      isDark ? 'bg-gray-800' : 'bg-white'
-    } shadow-md`}>
+    <header className={`sticky top-0 z-50 ${isDark ? 'bg-gray-800' : 'bg-white'
+      } shadow-md`}>
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
@@ -40,19 +58,22 @@ export default function Header({ onSearch }: HeaderProps) {
               <input
                 type="text"
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={(e) => {
+                  setSearchQuery(e.target.value);
+                  // const debounc =debouncing(searching,5000);
+                  debouncedSearch(e.target.value);
+
+                }}
                 placeholder="Search plants..."
-                className={`w-full px-4 py-2 rounded-lg border ${
-                  isDark
-                    ? 'bg-gray-700 text-white border-gray-600'
-                    : 'bg-white text-gray-800 border-gray-300'
-                } focus:outline-none focus:ring-2 focus:ring-green-500`}
+                className={`w-full px-4 py-2 rounded-lg border ${isDark
+                  ? 'bg-gray-700 text-white border-gray-600'
+                  : 'bg-white text-gray-800 border-gray-300'
+                  } focus:outline-none focus:ring-2 focus:ring-green-500`}
               />
               <button
                 type="submit"
-                className={`absolute right-2 top-1/2 transform -translate-y-1/2 ${
-                  isDark ? 'text-gray-400' : 'text-gray-500'
-                }`}
+                className={`absolute right-2 top-1/2 transform -translate-y-1/2 ${isDark ? 'text-gray-400' : 'text-gray-500'
+                  }`}
               >
                 🔍
               </button>
@@ -63,24 +84,21 @@ export default function Header({ onSearch }: HeaderProps) {
             <span className={`cursor-pointer ${isDark ? 'text-white' : 'text-gray-800'}`} onClick={() => router.push('/')}>Home</span>
             <button
               onClick={handleCartClick}
-              className={`relative p-2 rounded-full ${
-                isDark ? 'hover:bg-gray-700' : 'hover:bg-gray-100'
-              }`}
+              className={`relative p-2 rounded-full ${isDark ? 'hover:bg-gray-700' : 'hover:bg-gray-100'
+                }`}
             >
               🛒
               {totalItems > 0 && (
-                <span className={`absolute -top-1 -right-1 w-5 h-5 rounded-full text-xs flex items-center justify-center ${
-                  isDark ? 'bg-green-500' : 'bg-green-600'
-                } text-white`}>
+                <span className={`absolute -top-1 -right-1 w-5 h-5 rounded-full text-xs flex items-center justify-center ${isDark ? 'bg-green-500' : 'bg-green-600'
+                  } text-white`}>
                   {totalItems}
                 </span>
               )}
             </button>
             <button
               onClick={toggleTheme}
-              className={`p-2 rounded-full ${
-                isDark ? 'hover:bg-gray-700' : 'hover:bg-gray-100'
-              }`}
+              className={`p-2 rounded-full ${isDark ? 'hover:bg-gray-700' : 'hover:bg-gray-100'
+                }`}
             >
               {isDark ? '🌞' : '🌙'}
             </button>
